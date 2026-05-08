@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ttt",
+    "sls",
+    "ttt"
+  ],
+  "key": {
+    "t": [
+      "orbitalstrike:tnt_x18"
+    ],
+    "l": [
+      "orbitalstrike:lawnuke_shot"
+    ],
+    "s": [
+      "orbitalstrike:stab_shot"
+    ]
+  },
+  "result": {
+    "id": "orbitalstrike:nuke_clear",
+    "count": 1
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "orbitalstrike:block/tnt_bottom",
+    "top": "orbitalstrike:block/tnt_top",
+    "side": "orbitalstrike:block/tnt_x18_side"
+  }
+}

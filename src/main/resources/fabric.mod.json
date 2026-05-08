@@ -1,0 +1,33 @@
+{
+	"schemaVersion": 1,
+	"id": "orbitalstrike",
+	"version": "${version}",
+	"name": "better orbital strike cannon",
+	"description": "orbital strike cannon mod!\nBut is better\n\nLet me clarify that it only adds new formulas and TNT, which are neither too good nor too bad.",
+
+	"authors": [
+		"binhanngvn"
+	],
+	"contact": {
+		"homepage": "https://modrinth.com/project/better-orbital-strike-cannon",
+		"sources": "https://github.com/binhanngvn/orbital-strike-cannon"
+	},
+	"license": "MIT",
+	"icon": "assets/orbitalstrike/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.binhanngvn.orbitalstrike.OrbitalStrikeMod"
+		],
+		"client": [
+			"com.binhanngvn.orbitalstrike.client.OrbitalStrikeCannonClient"
+		]
+	},
+	"mixins": [],
+	"depends": {
+		"fabricloader": ">=0.18.4",
+		"minecraft": "~1.21.11",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
