@@ -1,0 +1,17 @@
+{
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "recipes": [
+      "orbitalstrike:tnt_x9",
+      "orbitalstrike:tnt_x18",
+      "orbitalstrike:nuke_clear",
+      "orbitalstrike:nuke_shot",
+      "orbitalstrike:lawnuke_shot",
+      "orbitalstrike:stab_shot"
+    ]
+  }
+}

@@ -1,9 +1,10 @@
 package com.binhanngvn.orbitalstrike;
 
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -22,8 +23,14 @@ public class CustomRodItem extends Item {
 
         if (world.isClient()) return ActionResult.PASS;
 
-        ServerWorld serverWorld = (ServerWorld) world;
         ItemStack stack = user.getStackInHand(hand);
+
+        // ép item còn đúng 1 durability
+        if (stack.getDamage() == 0) {
+            stack.setDamage(63);
+        }
+
+        ServerWorld serverWorld = (ServerWorld) world;
 
         Vec3d start = user.getEyePos();
         Vec3d dir = user.getRotationVec(1.0f);
@@ -74,20 +81,35 @@ public class CustomRodItem extends Item {
         return ActionResult.PASS;
     }
 
-    // 🔥 ===== BREAK ITEM LÁCH LUẬT =====
     private void breakItem(ItemStack stack, PlayerEntity user, Hand hand) {
 
         user.swingHand(hand, true);
 
         boolean wasCreative = user.getAbilities().creativeMode;
-        user.getAbilities().creativeMode = false;
-        stack.damage(1, user,
-                hand == Hand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND
-        );
 
-        user.getAbilities().creativeMode = wasCreative;
-        if (user instanceof net.minecraft.server.network.ServerPlayerEntity sp) {
-            sp.sendAbilitiesUpdate();
+        try {
+
+            if (wasCreative) {
+                user.getAbilities().creativeMode = false;
+            }
+
+            stack.damage(
+                    1,
+                    user,
+                    hand == Hand.MAIN_HAND
+                            ? EquipmentSlot.MAINHAND
+                            : EquipmentSlot.OFFHAND
+            );
+
+        } finally {
+
+            if (wasCreative) {
+                user.getAbilities().creativeMode = true;
+
+                if (user instanceof ServerPlayerEntity sp) {
+                    sp.sendAbilitiesUpdate();
+                }
+            }
         }
     }
 }

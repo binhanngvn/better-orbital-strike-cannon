@@ -20,11 +20,11 @@ public class ModItems {
         Identifier id = Identifier.of("orbitalstrike", name);
         RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
 
-        Item item = new CustomRodItem(
+        Item item = new UsedRodItem(
                 new Item.Settings()
                         .registryKey(key)
                         .maxCount(1)
-                        .maxDamage(1)
+                        .maxDamage(64)
                         .fireproof()
         );
 
