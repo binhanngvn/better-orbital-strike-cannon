@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/cube_bottom_top",
-  "textures": {
-    "bottom": "orbitalstrike:block/nuke_bottom",
-    "top": "orbitalstrike:block/nuke_top",
-    "side": "orbitalstrike:block/nuke_side"
-  }
-}
