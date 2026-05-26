@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ttt",
+    "sls",
+    "ttt"
+  ],
+  "key": {
+    "t": [
+      "betterorbitalstrike:tnt_x18"
+    ],
+    "l": [
+      "betterorbitalstrike:lawnuke_shot"
+    ],
+    "s": [
+      "betterorbitalstrike:stab_shot"
+    ]
+  },
+  "result": {
+    "id": "betterorbitalstrike:nuke_clear",
+    "count": 1
+  }
+}

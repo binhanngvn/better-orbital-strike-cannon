@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "betterorbitalstrike:block/tnt_bottom",
+    "top": "betterorbitalstrike:block/tnt_top",
+    "side": "betterorbitalstrike:block/tnt_x9_side"
+  }
+}

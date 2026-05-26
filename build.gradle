@@ -18,7 +18,7 @@ loom {
 	splitEnvironmentSourceSets()
 
 	mods {
-		"orbital-strike-cannon" {
+		"better-orbital-strike-cannon" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}

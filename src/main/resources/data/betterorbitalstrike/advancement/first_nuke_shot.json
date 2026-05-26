@@ -1,0 +1,23 @@
+{
+  "parent": "betterorbitalstrike:first_stab_shot",
+  "display": {
+    "icon": {
+      "id": "minecraft:fishing_rod"
+    },
+    "title": {
+      "translate": "advancement.betterorbitalstrike.first_nuke_shot.title"
+    },
+    "description": {
+      "translate": "advancement.betterorbitalstrike.first_nuke_shot.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "use_nuke_shot": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

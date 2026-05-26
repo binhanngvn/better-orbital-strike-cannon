@@ -1,0 +1,22 @@
+{
+  "item.betterorbitalstrike.stab_shot": "stab shot",
+  "item.betterorbitalstrike.nuke_shot": "nuke shot",
+  "item.betterorbitalstrike.lawnuke_shot": "lawnuke shot",
+  "item.betterorbitalstrike.gun_shot": "gun shot",
+  "item.betterorbitalstrike.tnt_x9": "tnt x9",
+  "item.betterorbitalstrike.tnt_x18": "tnt x18",
+  "item.betterorbitalstrike.nuke_clear": "nuke clear",
+
+  "advancement.betterorbitalstrike.first_stab_shot.title": "End of Line",
+  "advancement.betterorbitalstrike.first_stab_shot.desc": "First time locating the target",
+  "advancement.betterorbitalstrike.first_nuke_shot.title": "Small-Scale Sweep",
+  "advancement.betterorbitalstrike.first_nuke_shot.desc": "Time to upgrade!",
+  "advancement.betterorbitalstrike.first_lawnuke_shot.title": "Large-Scale Sweep",
+  "advancement.betterorbitalstrike.first_lawnuke_shot.desc": "Approaching maximum power!",
+  "advancement.betterorbitalstrike.nuke_clear.title": "Nuclear-Scale Sweep",
+  "advancement.betterorbitalstrike.nuke_clear.desc": "The CPU Destroyer",
+  "advancement.betterorbitalstrike.tnt_x9.title": "TNT Clock",
+  "advancement.betterorbitalstrike.tnt_x9.desc": "It's a clock",
+  "advancement.betterorbitalstrike.tnt_x18.title": "Big TNT Clock",
+  "advancement.betterorbitalstrike.tnt_x18.desc": "It's a clock, but bigger"
+}

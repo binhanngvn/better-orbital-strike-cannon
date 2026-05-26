@@ -1,0 +1,23 @@
+{
+  "parent": "betterorbitalstrike:tnt_x9",
+  "display": {
+    "icon": {
+      "id": "betterorbitalstrike:tnt_x18"
+    },
+    "title": {
+      "translate": "advancement.betterorbitalstrike.tnt_x18.title"
+    },
+    "description": {
+      "translate": "advancement.betterorbitalstrike.tnt_x18.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "use_tnt_x18": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:book"
+    },
+    "title": "Better Orbital Strike Cannon",
+    "description": "Better Orbital Strike Advancements",
+    "background": "minecraft:gui/advancements/backgrounds/adventure",
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "tick": {
+      "trigger": "minecraft:tick"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "recipes": [
+      "betterorbitalstrike:tnt_x9",
+      "betterorbitalstrike:tnt_x18",
+      "betterorbitalstrike:nuke_clear",
+      "betterorbitalstrike:nuke_shot",
+      "betterorbitalstrike:lawnuke_shot",
+      "betterorbitalstrike:stab_shot"
+    ]
+  }
+}

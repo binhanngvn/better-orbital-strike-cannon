@@ -1,0 +1,23 @@
+{
+  "parent": "betterorbitalstrike:tnt_x18",
+  "display": {
+    "icon": {
+      "id": "betterorbitalstrike:nuke_clear"
+    },
+    "title": {
+      "translate": "advancement.betterorbitalstrike.nuke_clear.title"
+    },
+    "description": {
+      "translate": "advancement.betterorbitalstrike.nuke_clear.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "use_nuke_clear": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

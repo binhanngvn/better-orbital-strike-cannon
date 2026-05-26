@@ -10,4 +10,4 @@ pluginManagement {
 }
 
 // Should match your modid
-rootProject.name = 'orbital-strike-cannon'
+rootProject.name = 'better-orbital-strike-cannon'

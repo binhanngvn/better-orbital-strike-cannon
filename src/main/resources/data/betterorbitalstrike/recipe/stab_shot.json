@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "tdt",
+    "tft",
+    "tdt"
+  ],
+  "key": {
+    "t": [
+      "minecraft:tnt"
+    ],
+    "d": [
+      "minecraft:diamond"
+    ],
+    "f": [
+      "minecraft:fishing_rod"
+    ]
+  },
+  "result": {
+    "id": "betterorbitalstrike:stab_shot",
+    "count": 1
+  }
+}

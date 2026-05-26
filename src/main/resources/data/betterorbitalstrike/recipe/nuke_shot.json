@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ete",
+    "tft",
+    "ete"
+  ],
+  "key": {
+    "t": [
+      "betterorbitalstrike:tnt_x9"
+    ],
+    "f": [
+      "betterorbitalstrike:stab_shot"
+    ],
+    "e": [
+      "minecraft:ender_eye"
+    ]
+  },
+  "result": {
+    "id": "betterorbitalstrike:nuke_shot",
+    "count": 1
+  }
+}
