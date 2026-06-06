@@ -31,14 +31,11 @@ public class OrbitalStrikeMod implements ModInitializer {
                         .build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of("betterorbitalstrike", "ascending_tnt")))
         );
 
-        // 1. ĐĂNG KÝ BLOCK TRƯỚC
         ModBlocks.registerModBlocks();
-
-        // 2. ĐĂNG KÝ ITEM TIẾP THEO
         ModItems.registerModItems();
-
-        // 3. ĐỂ HÀNH VI DISPENSER Ở CUỐI CÙNG
+        ModCreativeTabs.register();
         ModDispenserBehaviors.register();
+        ModCommands.register();
 
         DispenserBlock.registerBehavior(Items.TNT, new ItemDispenserBehavior() {
             @Override

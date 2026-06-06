@@ -1,35 +1,27 @@
 package com.binhanngvn.betterorbitalstrike;
 
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Heightmap;
-
-import java.lang.*;
+import net.minecraft.util.math.Box;
 
 public class OrbitalStrikes {
 
-    // 🌟 Vòng tròn lan ra
-    public static void spawnStabRingWave(ServerWorld world, BlockPos center) {
-
+    public static void spawnStabRingWave(ServerWorld level, BlockPos center) {
         new Thread(() -> {
-
             double cx = center.getX() + 0.5;
             double cz = center.getZ() + 0.5;
 
             double maxRadius = 61;
 
-            // 👉 vòng lẻ lan ra
             for (double radius = 2; radius <= maxRadius; radius += 3) {
-
                 double r = radius;
 
-                world.getServer().execute(() -> {
-
-                    int points = (int)(2 * Math.PI * r); // vẫn lấy điểm tròn
+                level.getServer().execute(() -> {
+                    int points = (int)(2 * Math.PI * r);
 
                     for (int i = 0; i < points; i++) {
-
                         double angle = 2 * Math.PI * i / points;
 
                         double x = cx + Math.cos(angle) * r;
@@ -42,19 +34,16 @@ public class OrbitalStrikes {
 
                         BlockPos pos = BlockPos.ofFloored(x, center.getY(), z);
 
-                        OrbitalstrikesLogic.spawnStabStrike(world, pos);
+                        OrbitalstrikesLogic.spawnStabStrike(level, pos);
                     }
-
                 });
 
                 try { Thread.sleep(300); } catch (Exception ignored) {}
             }
-
         }).start();
     }
 
-
-    public static void runVisualEffect(ServerWorld world, BlockPos center, double maxR, int duration) {
+    public static void runVisualEffect(ServerWorld level, BlockPos center, double maxR, int duration) {
         new Thread(() -> {
             double currentR = 0;
             double rot = 0;
@@ -64,7 +53,7 @@ public class OrbitalStrikes {
                 final double r = currentR;
                 final double rotation = rot;
 
-                world.getServer().execute(() -> {
+                level.getServer().execute(() -> {
                     double cx = center.getX() + 0.5;
                     double cz = center.getZ() + 0.5;
 
@@ -73,11 +62,27 @@ public class OrbitalStrikes {
                         double angle = (2 * Math.PI * j / circlePoints) + rotation;
                         double x = cx + Math.cos(angle) * r;
                         double z = cz + Math.sin(angle) * r;
-                        int y = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, (int)x, (int)z);
+                        int y = level.getTopY(
+                                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                                (int)x,
+                                (int)z
+                        );
 
-                        for (var player : world.getPlayers()) {
-                            world.spawnParticles(player, ParticleTypes.ELECTRIC_SPARK, true, true,
-                                    x, y + 0.5, z, 1, 0, 0, 0, 0);
+                        for (var player : level.getPlayers()) {
+                            level.spawnParticles(
+                                    player,
+                                    ParticleTypes.ELECTRIC_SPARK,
+                                    true,
+                                    true,
+                                    x,
+                                    y + 0.5,
+                                    z,
+                                    1,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                            );
                         }
                     }
                 });
@@ -89,17 +94,29 @@ public class OrbitalStrikes {
         }).start();
     }
 
-    public static void spawnAscendingBeam(ServerWorld world, BlockPos pos) {
+    public static void spawnAscendingBeam(ServerWorld level, BlockPos pos) {
         new Thread(() -> {
             double x = pos.getX() + 0.5;
             double z = pos.getZ() + 0.5;
 
             for (double y = pos.getY(); y <= pos.getY() + 72.5; y += 0.5) {
                 double finalY = y;
-                world.getServer().execute(() -> {
-                    for (var player : world.getPlayers()) {
-                        world.spawnParticles(player, ParticleTypes.END_ROD, true, true,
-                                x, finalY, z, 1, 0, 0, 0, 0);
+                level.getServer().execute(() -> {
+                    for (var player : level.getPlayers()) {
+                        level.spawnParticles(
+                                player,
+                                ParticleTypes.ELECTRIC_SPARK,
+                                true,
+                                true,
+                                x,
+                                finalY + 0.5,
+                                z,
+                                1,
+                                0,
+                                0,
+                                0,
+                                0
+                        );
                     }
                 });
                 try { Thread.sleep(10); } catch (Exception ignored) {}
@@ -107,19 +124,19 @@ public class OrbitalStrikes {
         }).start();
     }
 
-    public static void spawnAscendingTnt(ServerWorld world, BlockPos pos) {
+    public static void spawnAscendingTnt(ServerWorld level, BlockPos pos) {
         double x = pos.getX() + 0.5;
         double y = pos.getY();
         double z = pos.getZ() + 0.5;
-        AscendingTntEntity tnt = AscendingTntEntity.create(world, x, y, z);
-        world.spawnEntity(tnt);
+        AscendingTntEntity tnt = AscendingTntEntity.create(level, x, y, z);
+        level.spawnEntity(tnt);
     }
 
-    public static void clearAscendingTnt(ServerWorld world, BlockPos center) {
-        world.getServer().execute(() -> {
-            for (var entity : world.getEntitiesByClass(
+    public static void clearAscendingTnt(ServerWorld level, BlockPos center) {
+        level.getServer().execute(() -> {
+            for (var entity : level.getEntitiesByClass(
                     AscendingTntEntity.class,
-                    new net.minecraft.util.math.Box(center).expand(100),
+                    new Box(center).expand(100),
                     e -> true
             )) {
                 entity.discard();
