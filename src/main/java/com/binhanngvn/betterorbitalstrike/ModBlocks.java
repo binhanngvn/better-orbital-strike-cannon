@@ -8,6 +8,7 @@ import net.minecraft.entity.TntEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -146,6 +147,10 @@ public class ModBlocks {
     }
 
     public static void primeNukeClear(net.minecraft.server.world.ServerWorld world, BlockPos pos, @Nullable net.minecraft.entity.LivingEntity causer) {
+
+        // CHUYỂN ĐỔI KIỂU PLAYER Ở ĐÂY ĐỂ TRUYỀN XUỐNG CÁC LUỒNG
+        ServerPlayerEntity spCauser = causer instanceof ServerPlayerEntity ? (ServerPlayerEntity) causer : null;
+
         if (causer instanceof net.minecraft.server.network.ServerPlayerEntity player) {
             net.minecraft.advancement.AdvancementEntry adv = world.getServer().getAdvancementLoader().get(net.minecraft.util.Identifier.of("betterorbitalstrike", "nuke_clear"));
             if (adv != null) player.getAdvancementTracker().grantCriterion(adv, "use_nuke_clear");
@@ -166,14 +171,16 @@ public class ModBlocks {
             try { Thread.sleep(2500); } catch (Exception ignored) {}
 
             world.getServer().execute(() -> {
-                OrbitalstrikesLogic.spawnLawnuke(world, pos);
+                // TRUYỀN PLAYER VÀO LUỒNG NỔ
+                OrbitalstrikesLogic.spawnLawnuke(world, pos, spCauser);
                 OrbitalStrikes.clearAscendingTnt(world, pos);
             });
 
             try { Thread.sleep(4000); } catch (Exception ignored) {}
 
             world.getServer().execute(() -> {
-                OrbitalStrikes.spawnStabRingWave(world, pos);
+                // TRUYỀN PLAYER VÀO LUỒNG NỔ
+                OrbitalStrikes.spawnStabRingWave(world, pos, spCauser);
             });
 
         }).start();

@@ -3,12 +3,14 @@ package com.binhanngvn.betterorbitalstrike;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.Heightmap;
 import net.minecraft.util.math.Box;
 
 public class OrbitalStrikes {
 
-    public static void spawnStabRingWave(ServerWorld level, BlockPos center) {
+    // THÊM SERVERPLAYERENTITY VÀO HÀM NÀY
+    public static void spawnStabRingWave(ServerWorld level, BlockPos center, ServerPlayerEntity player) {
         new Thread(() -> {
             double cx = center.getX() + 0.5;
             double cz = center.getZ() + 0.5;
@@ -34,7 +36,8 @@ public class OrbitalStrikes {
 
                         BlockPos pos = BlockPos.ofFloored(x, center.getY(), z);
 
-                        OrbitalstrikesLogic.spawnStabStrike(level, pos);
+                        // TRUYỀN PLAYER XUỐNG DƯỚI
+                        OrbitalstrikesLogic.spawnStabStrike(level, pos, player);
                     }
                 });
 

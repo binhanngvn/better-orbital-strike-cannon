@@ -1,0 +1,17 @@
+{
+  "parent": "betterorbitalstrike:nuke_clear",
+  "display": {
+    "icon": { "id": "minecraft:dragon_egg" },
+    "title": { "translate": "advancement.betterorbitalstrike.kill_dragon.title" },
+    "description": { "translate": "advancement.betterorbitalstrike.kill_dragon.desc" },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill_dragon": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

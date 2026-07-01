@@ -8,10 +8,13 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Heightmap;
 
+import java.util.Random;
+
 public class OrbitalstrikesLogic {
 
-    private static void spawnTnt(ServerWorld world, double x, double y, double z, int fuse) {
-        TntEntity tnt = new TntEntity(world, x + 0.5, y, z + 0.5, null);
+    // THÊM THAM SỐ PLAYER VÀO ĐÂY
+    private static void spawnTnt(ServerWorld world, double x, double y, double z, int fuse, ServerPlayerEntity player) {
+        TntEntity tnt = new TntEntity(world, x + 0.5, y, z + 0.5, player); // Truyền player vào thay vì null
         tnt.setFuse(fuse);
         tnt.setVelocity(0, 0, 0);
         world.spawnEntity(tnt);
@@ -64,8 +67,8 @@ public class OrbitalstrikesLogic {
                 double cz = target.getZ() + 0.5;
 
                 for (int y = -64; y <= 170; y += 2) {
-                    spawnTnt(world, cx, y, cz, 0);
-                    spawnTnt(world, cx, y, cz, 0);
+                    spawnTnt(world, cx, y, cz, 0, player); // TRUYỀN PLAYER
+                    spawnTnt(world, cx, y, cz, 0, player); // TRUYỀN PLAYER
                 }
             });
         }).start();
@@ -99,14 +102,48 @@ public class OrbitalstrikesLogic {
             double[] radii = {0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.175, 0.2, 0.225, 0.25, 0.275, 0.3};
             int[]   points = {12,    24,   36,    36,  36,    48,   48,    72,  72,    84,   84,    84};
 
+            spawnTntVelocity(world, cx, spawnY, cz, fuse, 0, gravity, 0, player); // TRUYỀN PLAYER
+
+            Random random = new Random(
+                    world.getTime() ^ center.asLong()
+            );
+
             for (int ri = 0; ri < radii.length; ri++) {
+
                 double r = radii[ri];
                 int pts = points[ri];
+
+                double ringOffset =
+                        random.nextDouble() * Math.PI * 2;
+
                 for (int i = 0; i < pts; i++) {
-                    double angle = 2 * Math.PI * i / pts;
+
+                    double step = 2 * Math.PI / pts;
+
+                    double jitter =
+                            (random.nextDouble() - 0.5)
+                                    * step
+                                    * 2.0;
+
+                    double angle =
+                            ringOffset
+                                    + (step * i)
+                                    + jitter;
+
                     double dx = Math.cos(angle) * r;
                     double dz = Math.sin(angle) * r;
-                    spawnTntVelocity(world, cx, spawnY, cz, fuse, dx * spread, gravity, dz * spread);
+
+                    spawnTntVelocity(
+                            world,
+                            cx,
+                            spawnY,
+                            cz,
+                            fuse,
+                            dx * spread,
+                            gravity,
+                            dz * spread,
+                            player // TRUYỀN PLAYER
+                    );
                 }
             }
         });
@@ -142,22 +179,57 @@ public class OrbitalstrikesLogic {
             int[]   points = {12,    24,   24,    36,  36,    36,   48,    48,   48,  72,
                     72,    72,   84,    84,  84,    84,   84,    84,  100,   100,  100,   100, 120};
 
+            spawnTntVelocity(world, cx, spawnY, cz, fuse, 0, gravity, 0, player); // TRUYỀN PLAYER
+
+            Random random = new Random(
+                    world.getTime() ^ center.asLong()
+            );
+
             for (int ri = 0; ri < radii.length; ri++) {
+
                 double r = radii[ri];
                 int pts = points[ri];
+
+                double ringOffset =
+                        random.nextDouble() * Math.PI * 2;
+
                 for (int i = 0; i < pts; i++) {
-                    double angle = 2 * Math.PI * i / pts;
+
+                    double step = 2 * Math.PI / pts;
+
+                    double jitter =
+                            (random.nextDouble() - 0.5)
+                                    * step
+                                    * 2.0;
+
+                    double angle =
+                            ringOffset
+                                    + (step * i)
+                                    + jitter;
+
                     double dx = Math.cos(angle) * r;
                     double dz = Math.sin(angle) * r;
-                    spawnTntVelocity(world, cx, spawnY, cz, fuse, dx * spread, gravity, dz * spread);
+
+                    spawnTntVelocity(
+                            world,
+                            cx,
+                            spawnY,
+                            cz,
+                            fuse,
+                            dx * spread,
+                            gravity,
+                            dz * spread,
+                            player // TRUYỀN PLAYER
+                    );
                 }
             }
         });
     }
 
+    // THÊM THAM SỐ PLAYER VÀO ĐÂY
     private static void spawnTntVelocity(ServerWorld world, double x, double y, double z,
-                                         int fuse, double vx, double vy, double vz) {
-        TntEntity tnt = new TntEntity(world, x, y, z, null);
+                                         int fuse, double vx, double vy, double vz, ServerPlayerEntity player) {
+        TntEntity tnt = new TntEntity(world, x, y, z, player); // Truyền player vào thay vì null
         tnt.setFuse(fuse);
         tnt.setVelocity(vx, vy, vz);
         world.spawnEntity(tnt);

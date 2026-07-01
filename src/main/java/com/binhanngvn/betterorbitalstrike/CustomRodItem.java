@@ -11,6 +11,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.component.DataComponentTypes; // Import thêm cái này cho 1.21
 
 public class CustomRodItem extends Item {
 
@@ -25,14 +26,19 @@ public class CustomRodItem extends Item {
 
         ItemStack stack = user.getStackInHand(hand);
 
-        // ép item còn đúng 1 durability
+        if (stack.getOrDefault(DataComponentTypes.MAX_DAMAGE, 64) != 64) {
+            stack.set(DataComponentTypes.MAX_DAMAGE, 64);
+        }
+
+        if (stack.hasChangedComponent(DataComponentTypes.ENCHANTMENTS)) {
+            stack.remove(DataComponentTypes.ENCHANTMENTS);
+        }
+
         if (stack.getDamage() == 0) {
             stack.setDamage(63);
         }
 
         ServerWorld serverWorld = (ServerWorld) world;
-
-        // Ép kiểu người chơi để truyền vào hàm lấy thành tựu
         ServerPlayerEntity serverPlayer = (ServerPlayerEntity) user;
 
         Vec3d start = user.getEyePos();
@@ -83,34 +89,29 @@ public class CustomRodItem extends Item {
     }
 
     private void breakItem(ItemStack stack, PlayerEntity user, Hand hand) {
-
         user.swingHand(hand, true);
-
         boolean wasCreative = user.getAbilities().creativeMode;
-
         try {
-
             if (wasCreative) {
                 user.getAbilities().creativeMode = false;
             }
-
             stack.damage(
                     1,
                     user,
-                    hand == Hand.MAIN_HAND
-                            ? EquipmentSlot.MAINHAND
-                            : EquipmentSlot.OFFHAND
+                    hand == Hand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND
             );
-
-        } finally {
-
+        }
+         finally {
             if (wasCreative) {
                 user.getAbilities().creativeMode = true;
-
                 if (user instanceof ServerPlayerEntity sp) {
                     sp.sendAbilitiesUpdate();
+
                 }
+
             }
+
         }
+
     }
 }

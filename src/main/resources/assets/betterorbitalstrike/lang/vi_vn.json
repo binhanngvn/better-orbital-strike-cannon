@@ -1,14 +1,16 @@
 {
   "advancement.betterorbitalstrike.first_stab_shot.title": "Tận Cùng",
-  "advancement.betterorbitalstrike.first_stab_shot.desc": "Định Vị Lần Đầu",
+  "advancement.betterorbitalstrike.first_stab_shot.desc": "Sử dụng Stab Shot",
   "advancement.betterorbitalstrike.first_nuke_shot.title": "Càn Quét Quy Mô Nhỏ",
-  "advancement.betterorbitalstrike.first_nuke_shot.desc": "Hãy Nâng Cấp!",
-  "advancement.betterorbitalstrike.first_lawnuke_shot.title": "Càn Quét Quy Mô lớn",
-  "advancement.betterorbitalstrike.first_lawnuke_shot.desc": "Gần Đạt Cấp Tối Đa Rồi!",
-  "advancement.betterorbitalstrike.nuke_clear.title": "Càn Quét Quy Mô Hạn Nhân",
-  "advancement.betterorbitalstrike.nuke_clear.desc": "Hủy Diệt Máy Tính",
-  "advancement.betterorbitalstrike.tnt_x9.title": "Đồng Hồ Tnt",
-  "advancement.betterorbitalstrike.tnt_x9.desc": "Đó là đồng Hồ Biết Nổ!",
-  "advancement.betterorbitalstrike.tnt_x18.title": "Đồng Hồ Tnt Lớn",
-  "advancement.betterorbitalstrike.tnt_x18.desc": "Đó là đồng Hồ Nhưng Lớn Hơn"
+  "advancement.betterorbitalstrike.first_nuke_shot.desc": "Sử dụng Nuke Shot",
+  "advancement.betterorbitalstrike.first_lawnuke_shot.title": "Càn Quét Quy Mô Lớn",
+  "advancement.betterorbitalstrike.first_lawnuke_shot.desc": "Sử dụng LawNuke Shot",
+  "advancement.betterorbitalstrike.tnt_x9.title": "Đồng Hồ TNT",
+  "advancement.betterorbitalstrike.tnt_x9.desc": "Sử dụng TNT X9",
+  "advancement.betterorbitalstrike.tnt_x18.title": "Đồng Hồ TNT Lớn",
+  "advancement.betterorbitalstrike.tnt_x18.desc": "Sử dụng TNT X18",
+  "advancement.betterorbitalstrike.nuke_clear.title": "Kẻ Hủy Diệt CPU",
+  "advancement.betterorbitalstrike.nuke_clear.desc": "Sử dụng Nuke Clear",
+  "advancement.betterorbitalstrike.kill_dragon.title": "Đỉnh Cao Công Nghệ",
+  "advancement.betterorbitalstrike.kill_dragon.desc": "Sử dụng vũ khí quỹ đạo để kết liễu Ender Dragon"
 }
