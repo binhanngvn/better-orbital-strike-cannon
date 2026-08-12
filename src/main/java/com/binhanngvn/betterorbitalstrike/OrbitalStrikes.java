@@ -1,149 +1,134 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.core.BlockPos
+ *  net.minecraft.core.particles.ParticleOptions
+ *  net.minecraft.core.particles.ParticleTypes
+ *  net.minecraft.server.level.ServerLevel
+ *  net.minecraft.server.level.ServerPlayer
+ *  net.minecraft.world.entity.Entity
+ *  net.minecraft.world.level.Level
+ *  net.minecraft.world.level.levelgen.Heightmap$Types
+ *  net.minecraft.world.phys.AABB
+ */
 package com.binhanngvn.betterorbitalstrike;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.world.Heightmap;
-import net.minecraft.util.math.Box;
+import com.binhanngvn.betterorbitalstrike.AscendingTntEntity;
+import com.binhanngvn.betterorbitalstrike.OrbitalstrikesLogic;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.AABB;
 
 public class OrbitalStrikes {
-
-    // THÊM SERVERPLAYERENTITY VÀO HÀM NÀY
-    public static void spawnStabRingWave(ServerWorld level, BlockPos center, ServerPlayerEntity player) {
+    public static void spawnStabRingWave(ServerLevel level, BlockPos center, ServerPlayer player) {
         new Thread(() -> {
-            double cx = center.getX() + 0.5;
-            double cz = center.getZ() + 0.5;
-
-            double maxRadius = 61;
-
-            for (double radius = 2; radius <= maxRadius; radius += 3) {
+            double cx = (double)center.getX() + 0.5;
+            double cz = (double)center.getZ() + 0.5;
+            double maxRadius = 61.0;
+            for (double radius = 2.0; radius <= maxRadius; radius += 3.0) {
                 double r = radius;
-
                 level.getServer().execute(() -> {
-                    int points = (int)(2 * Math.PI * r);
-
-                    for (int i = 0; i < points; i++) {
-                        double angle = 2 * Math.PI * i / points;
-
+                    int points = (int)(Math.PI * 2 * r);
+                    for (int i = 0; i < points; ++i) {
+                        double angle = Math.PI * 2 * (double)i / (double)points;
                         double x = cx + Math.cos(angle) * r;
                         double z = cz + Math.sin(angle) * r;
-
                         double dx = x - cx;
                         double dz = z - cz;
-
                         if (Math.abs(Math.abs(dx) - Math.abs(dz)) > 0.5) continue;
-
-                        BlockPos pos = BlockPos.ofFloored(x, center.getY(), z);
-
-                        // TRUYỀN PLAYER XUỐNG DƯỚI
+                        BlockPos pos = BlockPos.containing((double)x, (double)center.getY(), (double)z);
                         OrbitalstrikesLogic.spawnStabStrike(level, pos, player);
                     }
                 });
-
-                try { Thread.sleep(300); } catch (Exception ignored) {}
+                try {
+                    Thread.sleep(300L);
+                    continue;
+                }
+                catch (Exception exception) {
+                    // empty catch block
+                }
             }
         }).start();
     }
 
-    public static void runVisualEffect(ServerWorld level, BlockPos center, double maxR, int duration) {
+    public static void runVisualEffect(ServerLevel level, BlockPos center, double maxR, int duration) {
         new Thread(() -> {
-            double currentR = 0;
-            double rot = 0;
-            double step = maxR / duration;
-
-            for (int i = 0; i < duration; i++) {
-                final double r = currentR;
-                final double rotation = rot;
-
+            double currentR = 0.0;
+            double rot = 0.0;
+            double step = maxR / (double)duration;
+            for (int i = 0; i < duration; ++i) {
+                double r = currentR;
+                double rotation = rot;
                 level.getServer().execute(() -> {
-                    double cx = center.getX() + 0.5;
-                    double cz = center.getZ() + 0.5;
-
-                    int circlePoints = (int) (2 * Math.PI * r * 2.5);
-                    for (int j = 0; j < circlePoints; j++) {
-                        double angle = (2 * Math.PI * j / circlePoints) + rotation;
+                    double cx = (double)center.getX() + 0.5;
+                    double cz = (double)center.getZ() + 0.5;
+                    int circlePoints = (int)(Math.PI * 2 * r * 2.5);
+                    for (int j = 0; j < circlePoints; ++j) {
+                        double angle = Math.PI * 2 * (double)j / (double)circlePoints + rotation;
                         double x = cx + Math.cos(angle) * r;
                         double z = cz + Math.sin(angle) * r;
-                        int y = level.getTopY(
-                                Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-                                (int)x,
-                                (int)z
-                        );
-
-                        for (var player : level.getPlayers()) {
-                            level.spawnParticles(
-                                    player,
-                                    ParticleTypes.ELECTRIC_SPARK,
-                                    true,
-                                    true,
-                                    x,
-                                    y + 0.5,
-                                    z,
-                                    1,
-                                    0,
-                                    0,
-                                    0,
-                                    0
-                            );
+                        int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int)x, (int)z);
+                        for (ServerPlayer player : level.players()) {
+                            level.sendParticles(player, (ParticleOptions)ParticleTypes.ELECTRIC_SPARK, true, true, x, (double)y + 0.5, z, 1, 0.0, 0.0, 0.0, 0.0);
                         }
                     }
                 });
-
-                rot += (0.2 + (r * 0.02));
+                rot += 0.2 + r * 0.02;
                 currentR += step;
-                try { Thread.sleep(50); } catch (Exception ignored) {}
+                try {
+                    Thread.sleep(50L);
+                    continue;
+                }
+                catch (Exception exception) {
+                    // empty catch block
+                }
             }
         }).start();
     }
 
-    public static void spawnAscendingBeam(ServerWorld level, BlockPos pos) {
+    public static void spawnAscendingBeam(ServerLevel level, BlockPos pos) {
         new Thread(() -> {
-            double x = pos.getX() + 0.5;
-            double z = pos.getZ() + 0.5;
-
-            for (double y = pos.getY(); y <= pos.getY() + 72.5; y += 0.5) {
+            double x = (double)pos.getX() + 0.5;
+            double z = (double)pos.getZ() + 0.5;
+            for (double y = (double)pos.getY(); y <= (double)pos.getY() + 72.5; y += 0.5) {
                 double finalY = y;
                 level.getServer().execute(() -> {
-                    for (var player : level.getPlayers()) {
-                        level.spawnParticles(
-                                player,
-                                ParticleTypes.ELECTRIC_SPARK,
-                                true,
-                                true,
-                                x,
-                                finalY + 0.5,
-                                z,
-                                1,
-                                0,
-                                0,
-                                0,
-                                0
-                        );
+                    for (ServerPlayer player : level.players()) {
+                        level.sendParticles(player, (ParticleOptions)ParticleTypes.ELECTRIC_SPARK, true, true, x, finalY + 0.5, z, 1, 0.0, 0.0, 0.0, 0.0);
                     }
                 });
-                try { Thread.sleep(10); } catch (Exception ignored) {}
+                try {
+                    Thread.sleep(10L);
+                    continue;
+                }
+                catch (Exception exception) {
+                    // empty catch block
+                }
             }
         }).start();
     }
 
-    public static void spawnAscendingTnt(ServerWorld level, BlockPos pos) {
-        double x = pos.getX() + 0.5;
+    public static void spawnAscendingTnt(ServerLevel level, BlockPos pos) {
+        double x = (double)pos.getX() + 0.5;
         double y = pos.getY();
-        double z = pos.getZ() + 0.5;
-        AscendingTntEntity tnt = AscendingTntEntity.create(level, x, y, z);
-        level.spawnEntity(tnt);
+        double z = (double)pos.getZ() + 0.5;
+        AscendingTntEntity tnt = AscendingTntEntity.create((Level)level, x, y, z);
+        level.addFreshEntity((Entity)tnt);
     }
 
-    public static void clearAscendingTnt(ServerWorld level, BlockPos center) {
+    public static void clearAscendingTnt(ServerLevel level, BlockPos center) {
         level.getServer().execute(() -> {
-            for (var entity : level.getEntitiesByClass(
-                    AscendingTntEntity.class,
-                    new Box(center).expand(100),
-                    e -> true
-            )) {
+            for (AscendingTntEntity entity : level.getEntitiesOfClass(AscendingTntEntity.class, new AABB(center).inflate(100.0), e -> true)) {
                 entity.discard();
             }
         });
     }
 }
+

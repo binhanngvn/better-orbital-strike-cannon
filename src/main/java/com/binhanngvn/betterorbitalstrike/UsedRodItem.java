@@ -1,35 +1,38 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.world.item.Item$Properties
+ *  net.minecraft.world.item.ItemStack
+ */
 package com.binhanngvn.betterorbitalstrike;
 
-import net.minecraft.item.ItemStack;
+import com.binhanngvn.betterorbitalstrike.CustomRodItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
-public class UsedRodItem extends CustomRodItem {
-
-    public UsedRodItem(Settings settings) {
+public class UsedRodItem
+extends CustomRodItem {
+    public UsedRodItem(Item.Properties settings) {
         super(settings);
     }
 
-    @Override
-    public ItemStack getDefaultStack() {
-        ItemStack stack = super.getDefaultStack();
-        stack.setDamage(63); // Đặt sẵn 1 độ bền
+    public ItemStack getDefaultInstance() {
+        ItemStack stack = super.getDefaultInstance();
+        stack.setDamageValue(63);
         return stack;
     }
 
-    @Override
-    public boolean isItemBarVisible(ItemStack stack) {
+    public boolean isBarVisible(ItemStack stack) {
         return true;
     }
 
-    // XÓA HOẶC SỬA LẠI PHƯƠNG THỨC NÀY
-    @Override
-    public int getItemBarStep(ItemStack stack) {
-        // Trả về 1 để hiển thị vạch nhỏ nhất
+    public int getBarWidth(ItemStack stack) {
         return 1;
     }
 
-    @Override
-    public int getItemBarColor(ItemStack stack) {
-        // Ép buộc thanh bar hiển thị màu đỏ (RGB cho màu đỏ là 0xFF0000)
+    public int getBarColor(ItemStack stack) {
         return 0xFF0000;
     }
 }
+

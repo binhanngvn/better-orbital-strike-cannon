@@ -1,117 +1,120 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.core.BlockPos
+ *  net.minecraft.core.Position
+ *  net.minecraft.core.component.DataComponents
+ *  net.minecraft.server.level.ServerLevel
+ *  net.minecraft.server.level.ServerPlayer
+ *  net.minecraft.world.InteractionHand
+ *  net.minecraft.world.InteractionResult
+ *  net.minecraft.world.entity.EquipmentSlot
+ *  net.minecraft.world.entity.LivingEntity
+ *  net.minecraft.world.entity.player.Player
+ *  net.minecraft.world.item.Item
+ *  net.minecraft.world.item.Item$Properties
+ *  net.minecraft.world.item.ItemStack
+ *  net.minecraft.world.level.Level
+ *  net.minecraft.world.phys.Vec3
+ */
 package com.binhanngvn.betterorbitalstrike;
 
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraft.component.DataComponentTypes; // Import thêm cái này cho 1.21
+import com.binhanngvn.betterorbitalstrike.ModItems;
+import com.binhanngvn.betterorbitalstrike.OrbitalStrikes;
+import com.binhanngvn.betterorbitalstrike.OrbitalstrikesLogic;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Position;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
-public class CustomRodItem extends Item {
-
-    public CustomRodItem(Settings settings) {
+public class CustomRodItem
+extends Item {
+    public CustomRodItem(Item.Properties settings) {
         super(settings);
     }
 
-    @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand) {
-
-        if (world.isClient()) return ActionResult.PASS;
-
-        ItemStack stack = user.getStackInHand(hand);
-
-        if (stack.getOrDefault(DataComponentTypes.MAX_DAMAGE, 64) != 64) {
-            stack.set(DataComponentTypes.MAX_DAMAGE, 64);
+    public InteractionResult use(Level world, Player user, InteractionHand hand) {
+        if (world.isClientSide()) {
+            return InteractionResult.PASS;
         }
-
-        if (stack.hasChangedComponent(DataComponentTypes.ENCHANTMENTS)) {
-            stack.remove(DataComponentTypes.ENCHANTMENTS);
+        ItemStack stack = user.getItemInHand(hand);
+        if ((Integer)stack.getOrDefault(DataComponents.MAX_DAMAGE, 64) != 64) {
+            stack.set(DataComponents.MAX_DAMAGE, 64);
         }
-
-        if (stack.getDamage() == 0) {
-            stack.setDamage(63);
+        if (stack.has(DataComponents.ENCHANTMENTS)) {
+            stack.remove(DataComponents.ENCHANTMENTS);
         }
-
-        ServerWorld serverWorld = (ServerWorld) world;
-        ServerPlayerEntity serverPlayer = (ServerPlayerEntity) user;
-
-        Vec3d start = user.getEyePos();
-        Vec3d dir = user.getRotationVec(1.0f);
-
+        if (stack.getDamageValue() == 0) {
+            stack.setDamageValue(63);
+        }
+        ServerLevel serverWorld = (ServerLevel)world;
+        ServerPlayer serverPlayer = (ServerPlayer)user;
+        Vec3 start = user.getEyePosition();
+        Vec3 dir = user.getViewVector(1.0f);
         BlockPos target = null;
-
-        for (int i = 1; i <= 512; i++) {
-            Vec3d point = start.add(dir.multiply(i));
-            BlockPos pos = BlockPos.ofFloored(point);
-
-            if (!world.isChunkLoaded(pos.getX() >> 4, pos.getZ() >> 4)) continue;
-
-            if (!world.getBlockState(pos).isAir()) {
-                target = pos;
-                break;
-            }
+        for (int i = 1; i <= 512; ++i) {
+            Vec3 point = start.add(dir.scale((double)i));
+            BlockPos pos = BlockPos.containing((Position)point);
+            if (!world.hasChunk(pos.getX() >> 4, pos.getZ() >> 4) || world.getBlockState(pos).isAir()) continue;
+            target = pos;
+            break;
         }
-
-        if (target == null) return ActionResult.FAIL;
-
+        if (target == null) {
+            return InteractionResult.FAIL;
+        }
         BlockPos finalTarget = target;
-
-        // ===== STAB =====
-        if (stack.isOf(ModItems.STAB_SHOT)) {
+        if (stack.is(ModItems.STAB_SHOT)) {
             OrbitalstrikesLogic.spawnStabStrike(serverWorld, finalTarget, serverPlayer);
-            breakItem(stack, user, hand);
-            return ActionResult.SUCCESS;
+            this.breakItem(stack, user, hand);
+            return InteractionResult.SUCCESS;
         }
-
-        // ===== NUKE =====
-        if (stack.isOf(ModItems.NUKE_SHOT)) {
+        if (stack.is(ModItems.NUKE_SHOT)) {
             OrbitalStrikes.runVisualEffect(serverWorld, finalTarget, 38.0, 60);
             OrbitalstrikesLogic.spawnNuke(serverWorld, finalTarget, serverPlayer);
-            breakItem(stack, user, hand);
-            return ActionResult.SUCCESS;
+            this.breakItem(stack, user, hand);
+            return InteractionResult.SUCCESS;
         }
-
-        // ===== LAWNUKE =====
-        if (stack.isOf(ModItems.LAWNUKE_SHOT)) {
+        if (stack.is(ModItems.LAWNUKE_SHOT)) {
             OrbitalStrikes.runVisualEffect(serverWorld, finalTarget, 65.0, 60);
             OrbitalstrikesLogic.spawnLawnuke(serverWorld, finalTarget, serverPlayer);
-            breakItem(stack, user, hand);
-            return ActionResult.SUCCESS;
+            this.breakItem(stack, user, hand);
+            return InteractionResult.SUCCESS;
         }
-
-        return ActionResult.PASS;
+        return InteractionResult.PASS;
     }
 
-    private void breakItem(ItemStack stack, PlayerEntity user, Hand hand) {
-        user.swingHand(hand, true);
-        boolean wasCreative = user.getAbilities().creativeMode;
+    /*
+     * WARNING - Removed try catching itself - possible behaviour change.
+     */
+    private void breakItem(ItemStack stack, Player user, InteractionHand hand) {
+        user.swing(hand, true);
+        boolean wasCreative = user.getAbilities().instabuild;
         try {
             if (wasCreative) {
-                user.getAbilities().creativeMode = false;
+                user.getAbilities().instabuild = false;
             }
-            stack.damage(
-                    1,
-                    user,
-                    hand == Hand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND
-            );
+            stack.hurtAndBreak(1, (LivingEntity)user, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
         }
-         finally {
+        finally {
             if (wasCreative) {
-                user.getAbilities().creativeMode = true;
-                if (user instanceof ServerPlayerEntity sp) {
-                    sp.sendAbilitiesUpdate();
-
+                user.getAbilities().instabuild = true;
+                if (user instanceof ServerPlayer) {
+                    ServerPlayer sp = (ServerPlayer)user;
+                    sp.onUpdateAbilities();
                 }
-
             }
-
         }
-
     }
 }
+

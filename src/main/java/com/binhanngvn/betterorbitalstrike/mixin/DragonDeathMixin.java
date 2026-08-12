@@ -1,51 +1,53 @@
 package com.binhanngvn.betterorbitalstrike.mixin;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.TntEntity;
-import net.minecraft.entity.boss.dragon.EnderDragonEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.item.PrimedTnt;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(LivingEntity.class)
+@Mixin(LivingEntity.class) // Target the class where 'die' is actually declared
 public class DragonDeathMixin {
 
-    @Inject(method = "onDeath", at = @At("HEAD"))
+    @Inject(method = "die", at = @At("HEAD"))
     private void onDragonDeath(DamageSource source, CallbackInfo ci) {
-        // Debug: test
+        // 1. Verify the dying entity is actually the Ender Dragon
+        if (!((Object) this instanceof EnderDragon)) {
+            return;
+        }
+
         System.out.println("Dragon death detected!");
+        Entity entity = source.getDirectEntity();
 
-        if (!((Object) this instanceof EnderDragonEntity)) {
+        if (!(entity instanceof PrimedTnt)) {
             return;
         }
 
-        if (!(source.getSource() instanceof TntEntity tnt)) {
+        PrimedTnt tnt = (PrimedTnt) entity;
+        LivingEntity livingEntity = tnt.getOwner();
+
+        if (!(livingEntity instanceof ServerPlayer)) {
             return;
         }
 
-        if (!(tnt.getOwner() instanceof ServerPlayerEntity player)) {
-            return;
-        }
-
-        var server = player.getEntityWorld().getServer();
+        ServerPlayer player = (ServerPlayer) livingEntity;
+        MinecraftServer server = player.level().getServer();
 
         if (server == null) {
             return;
         }
 
-        var advancement = server
-                .getAdvancementLoader()
-                .get(Identifier.of("betterorbitalstrike", "kill_ender_dragon"));
-
+        AdvancementHolder advancement = server.getAdvancements().get(Identifier.fromNamespaceAndPath("betterorbitalstrike", "kill_ender_dragon"));
         if (advancement != null) {
-            // criteria trong json của bạn là "kill_dragon"
-            player.getAdvancementTracker()
-                    .grantCriterion(advancement, "kill_dragon");
+            player.getAdvancements().award(advancement, "kill_dragon");
         }
     }
 }
